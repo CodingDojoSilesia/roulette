@@ -10,9 +10,13 @@
         }
     ],
     "require": {
-        "slim/slim": "^3.12"
+        "slim/slim": "^3.12",
+        "catfan/medoo": "^1.6"
     },
     "autoload": {
-        "psr-4": {"bets\\": "bets/"}
+        "psr-4": {
+            "bets\\": "bets/",
+            "errors\\": "errors/"
+        }
     }
 }

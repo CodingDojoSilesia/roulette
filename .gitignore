@@ -3,3 +3,4 @@ nbproject
 .idea
 vendor
 composer.phar
+database/database.db
