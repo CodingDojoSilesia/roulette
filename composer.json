@@ -1,0 +1,13 @@
+{
+    "name": "scd/roullete.kaput.api",
+    "description": "The kaput Roulette API written in Slim",
+    "type": "project",
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "Arkadiusz Nowakowski",
+            "email": "nowakowski.arkadiusz@gmail.com"
+        }
+    ],
+    "require": {}
+}
