@@ -9,5 +9,10 @@
             "email": "nowakowski.arkadiusz@gmail.com"
         }
     ],
-    "require": {}
+    "require": {
+        "slim/slim": "^3.12"
+    },
+    "autoload": {
+        "psr-4": {"bets\\": "bets/"}
+    }
 }

@@ -10,6 +10,11 @@ class High extends Bet
     {
         return 'High';
     }
+    
+    public function getDescription(): string
+    {
+        return 'Od 19 do 36.';
+    }
 
     public function getPayout(): int
     {

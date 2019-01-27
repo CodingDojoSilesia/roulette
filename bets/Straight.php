@@ -4,7 +4,7 @@ namespace bets;
 /**
  * Bet on a single number
  */
-class Street extends Bet
+class Straight extends Bet
 {
     /**
      * @var int

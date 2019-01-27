@@ -23,6 +23,11 @@ class Column extends ConsecutiveNumbersBet
     {
         return 'Column';
     }
+    
+    public function getDescription(): string
+    {
+        return implode('-', $this->consecutiveNumbers);
+    }
 
     public function getPayout(): int
     {
@@ -31,7 +36,7 @@ class Column extends ConsecutiveNumbersBet
 
     public function getResourcePath(): string
     {
-        return '/bets/column/' . $this->$startingNumber;
+        return '/bets/column/' . $this->startingNumber;
     }
     
     public static function getAllBetsCombination()

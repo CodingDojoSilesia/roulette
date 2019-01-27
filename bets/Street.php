@@ -40,7 +40,7 @@ class Street extends ConsecutiveNumbersBet
         // special cases with zero
         $bets[12] = new static(0);
         $bets[13] = new static(1);
-        $bets[13]->consecutiveNumbers[0] = 1;
+        $bets[13]->consecutiveNumbers[0] = 0;
         return $bets;
     }
 }

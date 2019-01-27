@@ -10,6 +10,11 @@ class Low extends Bet
     {
         return 'Low';
     }
+    
+    public function getDescription(): string
+    {
+        return 'Od 1 do 18.';
+    }
 
     public function getPayout(): int
     {

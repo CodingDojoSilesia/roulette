@@ -23,6 +23,11 @@ class Dozen extends ConsecutiveNumbersBet
     {
         return 'Dozen';
     }
+    
+    public function getDescription(): string
+    {
+        return implode('-', $this->consecutiveNumbers);
+    }
 
     public function getPayout(): int
     {
@@ -31,7 +36,7 @@ class Dozen extends ConsecutiveNumbersBet
 
     public function getResourcePath(): string
     {
-        return '/bets/dozen/' . $this->$startingNumber;
+        return '/bets/dozen/' . $this->startingNumber;
     }
     
     public static function getAllBetsCombination()

@@ -14,6 +14,14 @@ abstract class Bet
     abstract public function getName(): string;
     
     /**
+     * Gets a description of the bet.
+     */
+    public function getDescription(): string
+    {
+        return '';
+    }
+    
+    /**
      * Returns the payout, which is a multiplier of the nof chips. Remember that both chips and payout are passed to 
      * a player.
      */
