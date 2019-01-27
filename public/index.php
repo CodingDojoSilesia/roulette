@@ -21,12 +21,13 @@ $bets = array_merge(
 );
 
 $app = new \Slim\App;
+$databaseFilename = __DIR__ . '/../database/database.db';
 $playerId = null; // warning, this is global!
 
-$app->getContainer()['db'] = function (\Slim\Container $container) {
+$app->getContainer()['db'] = function (\Slim\Container $container) use ($databaseFilename) {
     return new Medoo\Medoo([
         'database_type' => 'sqlite',
-        'database_file' => __DIR__ . '/../database/database.db'
+        'database_file' => $databaseFilename
     ]);
 };
 
@@ -42,14 +43,14 @@ $app->getContainer()['phpErrorHandler'] = function (\Slim\Container $container) 
  * Generates the API documentation.
  */
 $app->get('/', function (Request $request, Response $response) use ($bets) {
-    return $response->getBody()->write(include __DIR__ . '/../view/main.php'); 
+    return $response->getBody()->write(include __DIR__ . '/../views/main.php'); 
 });
 
 /**
  * Creates a database structure
  */
-$app->get('/hardreset', function (Request $request, Response $response) {
-    unlink(__DIR__ . '/../database/database.db');
+$app->get('/hardreset', function (Request $request, Response $response) use ($databaseFilename) {
+    unlink($databaseFilename);
     $this->db->pdo->exec(file_get_contents(__DIR__ . '/../database/init.sql'));
     return $response->getBody()->write('OK'); 
 });
