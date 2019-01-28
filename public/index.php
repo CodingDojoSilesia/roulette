@@ -4,6 +4,9 @@ use Slim\Http\Response as Response;
 
 require __DIR__ . '/../vendor/autoload.php';
 
+/**
+ * All bets models, the order is important becouse the index is used for saving bets into the database.
+ */
 $bets = array_merge(
     [new bets\Black()],
     bets\Column::getAllBetsCombination(),
@@ -20,28 +23,37 @@ $bets = array_merge(
     bets\Street::getAllBetsCombination()
 );
 
+/**
+ * Starts the application.
+ */
 $app = new \Slim\App;
+// warning, totally ugliness, there are globals! but hey it works
 $databaseFilename = __DIR__ . '/../database/database.db';
-$playerId = null; // warning, this is global!
+$playerId = null;
 
+
+/**
+ * Dependency container
+ */
 $app->getContainer()['db'] = function (\Slim\Container $container) use ($databaseFilename) {
     return new Medoo\Medoo([
         'database_type' => 'sqlite',
         'database_file' => $databaseFilename
     ]);
 };
-
 $app->getContainer()['errorHandler'] = function (\Slim\Container $container) {
     return new errors\ErrorsHandler($container);
 };
-
 $app->getContainer()['phpErrorHandler'] = function (\Slim\Container $container) {
     return new errors\PhpErrorsHandler($container);
 };
-
 $app->getContainer()['notFoundHandler'] = function (\Slim\Container $container) {
     throw new errors\HttpException(404, 'Wskazany zasób nie istnieje.');
 };
+
+/**
+ * The real API starts here.
+ */
 
 /**
  * Generates the API documentation.
@@ -101,6 +113,11 @@ $app->get('/chips', function (Request $request, Response $response) {
     global $playerId;
     return $response->withJson(['chips' => (int) $this->db->get('players', 'chips', ['id' => $playerId])]); 
 })->add($authenticatedMiddleware);
+
+/**
+ * Makes the bets kaput!
+ */
+
 
 /**
  * All bets' POST resources.
