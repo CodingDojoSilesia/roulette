@@ -31,7 +31,6 @@ $app = new \Slim\App;
 $databaseFilename = __DIR__ . '/../database/database.db';
 $playerId = null;
 
-
 /**
  * Dependency container
  */
@@ -52,18 +51,18 @@ $app->getContainer()['notFoundHandler'] = function (\Slim\Container $container) 
 };
 
 /**
- * The real API starts here.
+ * THE REAL API STARTS HERE...
  */
 
 /**
- * Generates the API documentation.
+ * Generates the API documentation page (the home page).
  */
 $app->get('/', function (Request $request, Response $response) use ($bets) {
     return $response->getBody()->write(include __DIR__ . '/../views/main.php'); 
 });
 
 /**
- * Creates a database structure
+ * Creates a database structure, beforehand removes the database file.
  */
 $app->get('/hardreset', function (Request $request, Response $response) use ($databaseFilename) {
     unlink($databaseFilename);
@@ -72,7 +71,7 @@ $app->get('/hardreset', function (Request $request, Response $response) use ($da
 });
 
 /**
- * Registers a new player
+ * Registers a new player.
  */
 $app->post('/players', function (Request $request, Response $response) {
     $hashname = md5(uniqid('', true));
@@ -81,7 +80,7 @@ $app->post('/players', function (Request $request, Response $response) {
 });
 
 /**
- * The JSON middleware
+ * The JSON middleware, it validates the incoming user input.
  */
 $jsonMiddleware = function (Request $request, Response $response, $next) {
 	if ($request->isPost() || $request->isPut()) {
@@ -94,7 +93,7 @@ $jsonMiddleware = function (Request $request, Response $response, $next) {
 };
 
 /**
- * The authenticated middleware 
+ * The authenticated middleware, it checks the received hashname.
  */
 $authenticatedMiddleware = function (Request $request, Response $response, $next) use ($app) {
     global $playerId;
@@ -107,7 +106,7 @@ $authenticatedMiddleware = function (Request $request, Response $response, $next
 };
 
 /**
- * Return a player's the number of chips
+ * Return a player's the number of chips.
  */
 $app->get('/chips', function (Request $request, Response $response) {
     global $playerId;
