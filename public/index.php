@@ -39,6 +39,10 @@ $app->getContainer()['phpErrorHandler'] = function (\Slim\Container $container) 
     return new errors\PhpErrorsHandler($container);
 };
 
+$app->getContainer()['notFoundHandler'] = function (\Slim\Container $container) {
+    throw new errors\HttpException(404, 'Wskazany zasób nie istnieje.');
+};
+
 /**
  * Generates the API documentation.
  */
@@ -61,7 +65,7 @@ $app->get('/hardreset', function (Request $request, Response $response) use ($da
 $app->post('/players', function (Request $request, Response $response) {
     $hashname = md5(uniqid('', true));
     $this->db->insert('players', ['hashname' => $hashname, 'chips' => 100]);
-    return $response->withJson(['hashname' => $hashname]); 
+    return $response->withStatus(201)->withJson(['hashname' => $hashname]); 
 });
 
 /**
@@ -69,8 +73,8 @@ $app->post('/players', function (Request $request, Response $response) {
  */
 $jsonMiddleware = function (Request $request, Response $response, $next) {
 	if ($request->isPost() || $request->isPut()) {
-		json_decode($request->getBody(), true);
-		if ($data === null && json_last_error() != JSON_ERROR_NONE) {
+		$input = json_decode($request->getBody(), true);
+		if ($input === null && json_last_error() != JSON_ERROR_NONE) {
             throw new errors\HttpException(400, 'Przesłane dane nie są poprawnym JSON-em.');
 		}
 	}
@@ -103,9 +107,72 @@ $app->get('/chips', function (Request $request, Response $response) {
  */
 foreach ($bets as $index => $bet) {
     /* @var $bet bets\Bet */
-    $app->post($bet->getResourcePath(), function (Request $request, Response $response) use ($bet) {
-        return 'OK';
+    $app->post($bet->getResourcePath(), function (Request $request, Response $response) use ($index, $bet) {
+        global $playerId;
+        $input = json_decode($request->getBody(), true);
+        if (array_key_exists('chips', $input) === false) {
+            throw new errors\HttpException(422, 'Niepoprawana walidacja danych.', [
+                'chips' => 'Wartość nie została przesłana.'
+            ]);
+        }
+        $input['chips'] = (int) $input['chips'];
+        if ($input['chips'] === 0) {
+            throw new errors\HttpException(422, 'Niepoprawana walidacja danych.', [
+                'chips' => 'Wartość musi być liczbą naturalną większą od zera.'
+            ]);
+        }
+        $availableChips = (int) $this->db->get('players', 'chips', ['id' => $playerId]);
+        if ($input['chips'] > $availableChips) {
+            throw new errors\HttpException(422, 'Niepoprawana walidacja danych.', [
+                'chips' => 'Niewystarczająca liczba żetonów na koncie gracza.'
+            ]);
+        }
+        $this->db->action(function ($db) use ($index, $input, $availableChips) {
+            global $playerId;
+            $db->insert('bets', [
+                'playerId' => $playerId,
+                'betIndex' => $index,
+                'chips' => $input['chips'],
+                'isCompleted' => 0,
+                'spinNumber' => null
+            ]);
+            $db->update('players', ['chips' => $availableChips - $input['chips']], ['id' => $playerId]);
+        });
+        return $response->withStatus(201);
     })->add($authenticatedMiddleware)->add($jsonMiddleware);
 }
+
+/**
+ * The spin resource
+ */
+$app->post('/spin/{spin:[0-9]+}', function (Request $request, Response $response, $args) use ($bets) {
+    global $playerId;
+    $args['spin'] = (int) $args['spin'];
+    if ($args['spin'] < 0 || $args['spin'] > 36) {
+        throw new errors\HttpException(422, 'Niepoprawana walidacja danych.', [
+            'spin' => 'Wartość musi być liczbą naturalną z domknietego zakresu od 0 do 36.'
+        ]);
+    }
+    $placedBets = $this->db->select('bets', '*', [
+        'isCompleted' => 0,
+        'playerId' => $playerId
+    ]);
+    $placedBetsIds = [];
+    foreach ($placedBets as $placedBet) {
+        $placedBetsIds[] = $placedBet['id'];
+        if ($bets[$placedBet['betIndex']]->validate($args['spin'])) {
+            $chipsModifier = $bets[$placedBet['betIndex']]->getPayout() * $placedBet['chips'] + $placedBet['chips'];
+            $this->db->update(
+                'players',
+                ['chips' => Medoo\Medoo::raw('chips + ' . ($chipsModifier))],
+                ['id' => $playerId]
+            );
+        }
+    }
+    $this->db->update('bets', ['isCompleted' => 1, 'spinNumber' => $args['spin']], ['id' => $placedBetsIds]);
+    return $response
+        ->withStatus(201)
+        ->withJson(['chips' => (int) $this->db->get('players', 'chips', ['id' => $playerId])]); 
+})->add($authenticatedMiddleware);
 
 $app->run();
