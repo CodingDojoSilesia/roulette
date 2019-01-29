@@ -15,8 +15,8 @@
     },
     "autoload": {
         "psr-4": {
-            "bets\\": "bets/",
-            "errors\\": "errors/"
+            "bets\\": "src/bets/",
+            "errors\\": "src/errors/"
         }
     }
 }

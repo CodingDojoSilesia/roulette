@@ -58,7 +58,7 @@ $app->getContainer()['notFoundHandler'] = function (\Slim\Container $container) 
  * Generates the API documentation page (the home page).
  */
 $app->get('/', function (Request $request, Response $response) use ($bets) {
-    return $response->getBody()->write(include __DIR__ . '/../views/main.php'); 
+    return $response->getBody()->write(include __DIR__ . '/../src/views/main.php'); 
 });
 
 /**
