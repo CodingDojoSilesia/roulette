@@ -116,7 +116,22 @@ $app->get('/chips', function (Request $request, Response $response) {
 /**
  * Makes the bets kaput!
  */
-
+$bets = array_merge(
+    bets\Corner::getAllBetsCombination(),
+    bets\Straight::getAllBetsCombination(),
+    [new bets\KaputBlack()],
+    bets\Column::getAllBetsCombination(),
+    bets\Dozen::getAllBetsCombination(),
+    [new bets\KaputEven()],
+    [new bets\KaputHigh()],
+    [new bets\KaputLow()],
+    [new bets\Odd()],
+    [new bets\KaputRed()],
+    bets\KaputSplit::getAllBetsCombination(),
+    bets\Street::getAllBetsCombination()
+);
+unset($bets[20]); // @kaput
+unset($bets[27]); // @kaput
 
 /**
  * All bets' POST resources.
@@ -138,11 +153,11 @@ foreach ($bets as $index => $bet) {
             ]);
         }
         $availableChips = (int) $this->db->get('players', 'chips', ['id' => $playerId]);
-        if ($input['chips'] > $availableChips) {
+        /*if ($input['chips'] > $availableChips) {
             throw new errors\HttpException(422, 'Niepoprawana walidacja danych.', [
                 'chips' => 'Niewystarczająca liczba żetonów na koncie gracza.'
             ]);
-        }
+        }*/ // @kaput
         $this->db->action(function ($db) use ($index, $input, $availableChips) {
             global $playerId;
             $db->insert('bets', [

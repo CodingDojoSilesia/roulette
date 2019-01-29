@@ -131,6 +131,11 @@ ob_start();
         <p>Identyfikacja gracza jest realizowana na podstawie wartości, tj. <code>hashname</code> otrzymywany z zasobie tworzenia nowego gracza, przekazanej w 
             nagłówku <code>Authorization</code>.</p>
         
+        <h2>Błędy</h2>
+        
+        <p>W przypadku gdy zakład nie istnieje zwrócony kod to 404. Gdy wysłany zostaje JSON zawierający nieprawidłowe danr zwracany kod jest równy 422 (błąd walidacji), 
+            w pozostałych przypadkach kody błędów to 400 i 500.</p>
+        
         <h2>Lista zasobów API</h2>
         
         <table class="table">

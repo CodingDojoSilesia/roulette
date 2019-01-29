@@ -6,7 +6,7 @@ namespace bets;
  */
 class Red extends Bet
 {
-    private $numbers = [1,3,5,7,9,12,14,16,18,21,23,25,27,28,30,32,34,36];
+    protected $numbers = [1,3,5,7,9,12,14,16,18,21,23,25,27,28,30,32,34,36];
     
     public function getName(): string
     {

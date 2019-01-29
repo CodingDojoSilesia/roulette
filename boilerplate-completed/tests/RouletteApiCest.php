@@ -277,6 +277,10 @@ class RouletteApiCest
         $I->sendPOST('/bets/low', ['chips' => 100]);
         $I->sendPOST('/spin/36');
         $I->assertEquals(0, json_decode($I->grabResponse(), true)['chips']);
+        $I->haveHttpHeader('Authorization', $I->grabHashname());
+        $I->sendPOST('/bets/low', ['chips' => 100]);
+        $I->sendPOST('/spin/0');
+        $I->assertEquals(0, json_decode($I->grabResponse(), true)['chips']);
     }
     
     protected function redBetsProvider()
@@ -372,6 +376,10 @@ class RouletteApiCest
         $I->haveHttpHeader('Authorization', $I->grabHashname());
         $I->sendPOST('/bets/even', ['chips' => 100]);
         $I->sendPOST('/spin/1');
+        $I->assertEquals(0, json_decode($I->grabResponse(), true)['chips']);
+        $I->haveHttpHeader('Authorization', $I->grabHashname());
+        $I->sendPOST('/bets/even', ['chips' => 100]);
+        $I->sendPOST('/spin/0');
         $I->assertEquals(0, json_decode($I->grabResponse(), true)['chips']);
     }
 }
