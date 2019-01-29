@@ -132,7 +132,7 @@ foreach ($bets as $index => $bet) {
             ]);
         }
         $input['chips'] = (int) $input['chips'];
-        if ($input['chips'] === 0) {
+        if ($input['chips'] <= 0) {
             throw new errors\HttpException(422, 'Niepoprawana walidacja danych.', [
                 'chips' => 'Wartość musi być liczbą naturalną większą od zera.'
             ]);

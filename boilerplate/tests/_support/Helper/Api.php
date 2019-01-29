@@ -17,7 +17,7 @@ class Api extends \Codeception\Module
         $rawOutput = curl_exec($ch);
         if (! curl_errno($ch)) {
             $info = curl_getinfo($ch);
-            if ($info['http_code'] === 200) {
+            if ($info['http_code'] === 201) {
                 $jsonOutput = json_decode($rawOutput, true);
                 return $jsonOutput['hashname'];
             }
