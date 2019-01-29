@@ -37,7 +37,7 @@ class Corner extends ConsecutiveNumbersBet
     public static function getAllBetsCombination()
     {
         $bets = [];
-        for ($i = 0; $i < 10; ++$i) {
+        for ($i = 0; $i < 11; ++$i) {
             $bets[] = new static($i * 3 + 1);
             $bets[] = new static($i * 3 + 2);
         }

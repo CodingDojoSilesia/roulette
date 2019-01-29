@@ -11,8 +11,16 @@ ob_start();
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.2.1/css/bootstrap.min.css" integrity="sha384-GJzZqFGwb1QTTN6wy59ffF1BuGJpLSa9DkKMp0DgiMDm4iYMj70gZWKYbI706tWS" crossorigin="anonymous">
     <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.7.0/css/all.css" integrity="sha384-lZN37f5QGtY3VHgisS14W3ExzMWZxybE1SJSEsQp9S+oqd12jhcu+A56Ebc1zFSJ" crossorigin="anonymous">
     <style type="text/css">
-        body { padding: 32px; }
+        body { padding: 32px 32px 0; }
         main { max-width: 1024px; margin: 0 auto; }
+        h1 { margin: 0; }
+        h2, h3, h4 { margin: 0 0 32px; }
+        p { margin: 0 0 32px; }
+        pre { margin: 0 0 32px; }
+        p + pre { margin: -32px 0 32px; }
+        ul { margin-bottom: 32px; }
+        p + ul { margin-top: -32px; }
+        table.table { margin-bottom: 32px; }
     </style>
 </head>
 <body>
@@ -26,7 +34,7 @@ ob_start();
         Gracz może postawić dowolną liczbę zakładów (których lista znajduje się poniżej) w ramach posiadanej przez siebie puli żetonów. Liczbę żetonów, którą stawiamy przekazujemy za pomocą następującego żądania:</p>
         
         <pre><code>{
-    "chips": {stawiana liczba żetonów}
+    "chips": {liczba stawianych żetonów}
 }</code></pre>
         
         <h2>Zasady gry w ruletkę</h2>
