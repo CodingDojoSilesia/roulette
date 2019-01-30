@@ -9,6 +9,11 @@
         }
     ],
     "require": {
+        "php": ">=7.1.0",
+        "ext-xml": "*",
+        "ext-mbstring": "*",
+        "ext-sqlite3": "*",
+        "ext-zip": "*",
         "codeception/codeception": "^2.5"
     }
 }
