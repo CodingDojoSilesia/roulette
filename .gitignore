@@ -1,0 +1,7 @@
+/nbproject/private/
+nbproject
+.idea
+vendor
+composer.phar
+database/database.db
+database.db

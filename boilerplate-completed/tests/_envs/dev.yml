@@ -1,0 +1,4 @@
+modules:
+    config:
+        REST:
+            url: http://localhost:8000
