@@ -159,6 +159,14 @@ ob_start();
                     <td>Obecnie wyświetlany zasób.</td>
                 </tr>
                 <tr>
+                    <td><span class="badge badge-primary">GET</span></td>
+                    <td>Tworzenie nowej bazy danych</td>
+                    <td>/hardreset</td>
+                    <td class="text-right">-</td>
+                    <td><span class="badge badge-success">200</span></td>
+                    <td>Tworzy plik z pustą bazą danych. Musi zostać utworzony przynajmniej raz (struktura).</td>
+                </tr>
+                <tr>
                     <td><span class="badge badge-info">POST</span></td>
                     <td>Tworzenie nowego gracza</td>
                     <td>/players</td>
