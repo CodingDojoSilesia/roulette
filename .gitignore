@@ -4,3 +4,4 @@ nbproject
 vendor
 composer.phar
 database/database.db
+database.db
