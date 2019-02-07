@@ -14,8 +14,8 @@ class Dozen extends ConsecutiveNumbersBet
     public function __construct(int $startingNumber)
     {
         $this->startingNumber = $startingNumber;
-        for ($i = ($startingNumber - 1); $i < ($startingNumber - 1) + 12; ++$i) {
-            $this->consecutiveNumbers[] = $i + 1;
+        for ($i = 1; $i <= 12; ++$i) {
+            $this->consecutiveNumbers[] = $i + ($startingNumber - 1) * 12;
         }
     }
     
